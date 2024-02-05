@@ -1,0 +1,19 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #E5E1DA; 
+  color: #3D3B40; /* White */
+  position: center;
+}
+
+h1 {
+  color: #86B6F6; 
+  font-size: 500px;
+}
+
+h2 {
+  color: #3D3B40;
+}
+
+h3 {
+  color: #3D3B40;
+}

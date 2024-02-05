@@ -1,0 +1,119 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Pass Analysis
+
+This document serves as an analysis of the passes that led to a scoring opportunity (Shot on Goal). This graphics in this document show the final pass made to a player before that player took a shot. That does not account for any movement the player does after receiving the puck. This should assist in making a decision about where our best chances are coming from. 
+
+The red dot symbolizes the location of the player who initiates the pass. While the blue arrow symbolizes the end location and reception of the pass. Note that the tip of the arrow may not be exactly where the shot was taken from, but rather where the player who took the shot received the pass. However, in most cases the shot was taken quickly after receiving.
+
+___
+
+<br><br>
+
+## Period 1
+
+All shots were taken immediately after or soon after reception of the pass in this period.
+
+This is the graph that shows period 1's shots on goal:
+
+```{r, echo=FALSE}
+library(ggplot2)
+library(sportyR)
+
+time_p1 <- c(17.27, 15.45, 9.30, 9.15, 8.00, 3.33, 3.18)
+time_p2 <- c(17.20, 12.53, 11.34, 11.10, 10.18, 9.58, 1.33, 0.37)
+time_p3 <- c(16.30, 16.10, 16.05, 15.06, 12.06, 10.31, 9.27, 3.15)
+
+passes_data <- data.frame(
+  x_start = c(-45, -30, 87, 29, 94, 87),
+  y_start = c(-18, 3, 37, 37, -15, 34),
+  x_end = c(5, 13, 32, 60, 80, 61),
+  y_end = c(36, 24, 28, 5, -3, 4)
+)
+
+#create graph
+geom_hockey('nhl') +
+  geom_segment(aes(x = passes_data$x_start, y = passes_data$y_start, xend = passes_data$x_end, yend = passes_data$y_end), arrow = arrow(length = unit(0.2, "inches")), color = "blue") +
+  geom_point(aes(x = passes_data$x_start, y = passes_data$y_start), color = "red", size = 3) +
+  labs(title = "Hockey Passes", x = "X Coordinate", y = "Y Coordinate")
+
+```
+
+
+___
+
+<br><br>
+
+ 
+## Period 2
+
+
+This is the graph that shows period 2's shots on goal:
+
+```{r, echo=FALSE}
+time_p1 <- c(17.27, 15.45, 9.30, 9.15, 8.00, 3.33, 3.18)
+time_p2 <- c(17.20, 12.53, 11.34, 11.10, 10.18, 9.58, 1.33, 0.37)
+time_p3 <- c(16.30, 16.10, 16.05, 15.06, 12.06, 10.31, 9.27, 3.15)
+
+passes_data <- data.frame(
+  x_start = c(37, -85, -29, -15, -29, 11, 7, -33),
+  y_start = c(39, -9, 17, 27, 1, 37, 13, 36),
+  x_end = c(-22, -78, -52, -27, -40, -19, -8, -29),
+  y_end = c(30, 5, -24, -3, 23, 41, 37, -3)
+)
+
+#create graph
+geom_hockey('nhl') +
+  geom_segment(aes(x = passes_data$x_start, y = passes_data$y_start, xend = passes_data$x_end, yend = passes_data$y_end), arrow = arrow(length = unit(0.2, "inches")), color = "blue") +
+  geom_point(aes(x = passes_data$x_start, y = passes_data$y_start), color = "red", size = 3) +
+  labs(title = "Hockey Passes", x = "X Coordinate", y = "Y Coordinate")
+
+```
+
+___
+
+<br><br>
+
+
+## Period 3
+
+
+Both goals from this period are not graphed because it came from an NCSU turnover in the defensive zone and neutral zone respectively. No passes were made before the shot. Another pass at 16:05 remaining in the period is not shown for the same reason.
+
+This is the graph that shows period 3's shots on goal:
+
+```{r, echo=FALSE}
+time_p1 <- c(17.27, 15.45, 9.30, 9.15, 8.00, 3.33, 3.18)
+time_p2 <- c(17.20, 12.53, 11.34, 11.10, 10.18, 9.58, 1.33, 0.37)
+time_p3 <- c(16.30, 16.10, 16.05, 15.06, 12.06, 10.31, 9.27, 3.15)
+
+passes_data <- data.frame(
+  x_start = c(29, 37, -37, 50, 70),
+  y_start = c(2, -41, -35, -10, 11),
+  x_end = c(32, 29, -27, 60, 80),
+  y_end = c(32, -25, -7, 13, 24)
+)
+
+#create graph
+geom_hockey('nhl') +
+  geom_segment(aes(x = passes_data$x_start, y = passes_data$y_start, xend = passes_data$x_end, yend = passes_data$y_end), arrow = arrow(length = unit(0.2, "inches")), color = "blue") +
+  geom_point(aes(x = passes_data$x_start, y = passes_data$y_start), color = "red", size = 3) +
+  labs(title = "Hockey Passes", x = "X Coordinate", y = "Y Coordinate")
+
+```
+
+## Overview
+
+I believe that the biggest indicator that we can see from this analysis is a lack of diversity in our attacks as well as a lack of passing in the offensive zone when we are playing poorly. In the first two periods, when we had no major scoring chances our final passes were near the blue line. While in the third period when we scored twice and had many high percentage scoring chances. We either passed in the offensive zone, or we took advantage of a turnover. Otherwise I believe we favor one side during each period. In the first and third period we favored the goalies right handed side. While in the second period we favored his left side. 
+
+
+___
+
+<br><br>
+<br><br>
