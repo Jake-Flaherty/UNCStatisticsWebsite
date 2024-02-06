@@ -24,7 +24,7 @@ library(readr)
 library(tidyverse)
 library(knitr)
 
-Indivi_Stats <- read_csv("./final.csv")
+Indivi_Stats <- read_csv("UNC Roster Individual Febuary 6.csv")
 Team_Stats <- read_csv("./23-24 UNC Team Stats - Sheet1.csv")
 ```
 
@@ -104,6 +104,25 @@ ___
 
 <br>
 
+## Plus/Minus Table
+
+```{r plusminus, echo=FALSE}
+PM_DF <- subset(Indivi_Stats, Pos!="Goalie") %>%
+  transmute(Player,
+                   Pos,
+                   `Plus/Minus`) %>%
+  arrange(desc(`Plus/Minus`))
+
+PM_DF_Table <- kable(PM_DF, format = 'simple')
+```
+
+`r PM_DF_Table`
+
+___
+
+<br>
+
+
 ## Goalie Data
 
 ```{r goalie, echo=FALSE}
@@ -129,7 +148,7 @@ ___
 
 <br>
 
-- [UNC at NCSU Febuary 2nd](WriteUps/NCSU Feb2/NCSUPassAnalysis.html)
+- [UNC at NCSU Febuary 2nd Pass Analysis](WriteUps/NCSU Feb2/NCSUPassAnalysis.html)
 
 ___
 
