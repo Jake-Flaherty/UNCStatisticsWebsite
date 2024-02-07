@@ -196,6 +196,6 @@ For season aggregates go to the main page of the website.
 
 <br>
 
-- [Main Page](../index.html)
+- [Main Page](../)
 
 <br><br><br>
