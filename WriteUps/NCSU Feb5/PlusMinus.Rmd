@@ -1,0 +1,201 @@
+---
+title: "UNC vs NCSU Weekend Games"
+output: html_document
+date: "2024-02-05"
+---
+
+
+---
+
+<br>
+```{r, include=FALSE}
+library(tidyverse)
+library(kableExtra)
+library(gridExtra)
+data <- read.csv("NCSUFeb2indiv.csv")
+data2 <- read.csv("NCSUFeb5indiv.csv")
+teamdata <- read.csv("23-24 UNC Team Stats - Sheet1.csv")
+```
+
+# Febuary 2nd
+### Game @ Invisalgin Arena
+
+<br>
+
+## Plus/Minus
+
+```{r, echo=FALSE}
+offense_data <- subset(data, Pos == "Forward") %>% subset(Plus.Minus != 0)
+defense_data <- subset(data, Pos == "Defense") %>% subset(Plus.Minus != 0)
+
+plusminus_off <- ggplot(offense_data, aes(x = reorder(Player, Plus.Minus), y = Plus.Minus, fill = factor(Plus.Minus > 0))) +
+  geom_bar(stat = "identity", color = "black") +
+  scale_fill_manual(values = c("red", "#7BAFD4"), labels = c("False", "True")) +
+  labs(title = "Offense +/- vs NCST 2/2",
+       x = "Players",
+       y = "Plus-Minus", fill = "Positive +/-?") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+#plusminus_off
+
+plusminus_def <- ggplot(defense_data, aes(x = reorder(Player, Plus.Minus), y = Plus.Minus, fill = factor(Plus.Minus > 0))) +
+  geom_bar(stat = "identity", color = "black") +
+  scale_fill_manual(values = c("red", "#7BAFD4"), labels = c("False", "True")) +
+  labs(title = "Defense +/- vs NCST 2/2",
+       x = "Players",
+       y = "Plus-Minus", fill = "Positive +/-?") +
+  coord_cartesian(ylim = c(-2,2))+
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+#plusminus_def
+
+combined_graphic <- grid.arrange(plusminus_off, plusminus_def, ncol=2)
+```
+
+---
+
+<br>
+
+# Febuary 5th
+### Game @ PNC Arena
+
+
+<br>
+
+## Plus/Minus
+
+```{r, echo=FALSE}
+offense_data2 <- subset(data2, Pos == "Forward") %>% subset(Plus.Minus != 0)
+defense_data2 <- subset(data2, Pos == "Defense") %>% subset(Plus.Minus != 0)
+
+plusminus_off2 <- ggplot(offense_data2, aes(x = reorder(Player, Plus.Minus), y = Plus.Minus, fill = factor(Plus.Minus > 0))) +
+  geom_bar(stat = "identity", color = "black") +
+  scale_fill_manual(values = c("red", "#7BAFD4"), labels = c("False", "True")) +
+  labs(title = "Offense +/- vs NCST 2/5",
+       x = "Players",
+       y = "Plus-Minus", fill = "Positive +/-?") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+#plusminus_off2
+
+plusminus_def2 <- ggplot(defense_data2, aes(x = reorder(Player, Plus.Minus), y = Plus.Minus, fill = factor(Plus.Minus > 0))) +
+  geom_bar(stat = "identity", color = "black") +
+  scale_fill_manual(values = c("red", "#7BAFD4"), labels = c("False", "True")) +
+  labs(title = "Defense +/- vs NCST 2/5",
+       x = "Players",
+       y = "Plus-Minus", fill = "Positive +/-?") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+#plusminus_def2
+
+combined_graphic2 <- grid.arrange(plusminus_off2, plusminus_def2, ncol=2)
+```
+
+---
+
+<br>
+
+# Both Games
+
+
+<br>
+
+## Plus/Minus
+
+```{r, echo=FALSE}
+merged_data <- merge(data, data2, by = "Player", all = TRUE) %>%
+  transmute(Player,
+            Pos = Pos.x,
+            P.M = Plus.Minus.x+Plus.Minus.y
+  ) %>%
+  subset(P.M != 0) %>%
+  arrange(desc(P.M))
+
+PlusMinusTable <- kable(merged_data) %>% 
+  footnote(general='Plus and Minus over both games against NCSU. Players are not shown if they have a plus minus of zero.') %>%
+  kable_styling(bootstrap_options = c("striped","hover"), full_width = F, position = "left")
+
+PlusMinusTable
+```
+
+---
+
+<br>
+
+## Baseline Stats
+
+<br>
+
+```{r, echo=FALSE}
+NCSUTeamDataFG <- teamdata %>% 
+  subset(Opponent=='NCSU') %>%
+  subset(Period=='FG')
+
+FaceoffPercentage <- round((sum(NCSUTeamDataFG$FaceoffWins)/sum(NCSUTeamDataFG$FaceoffAttempts)*100), digits=2)
+HitTotalUNC <- sum(NCSUTeamDataFG$Hits)
+HitTotalNCSU <- sum(NCSUTeamDataFG$HitsOpp)
+TOTotal <- sum(NCSUTeamDataFG$TOO+NCSUTeamDataFG$TON+NCSUTeamDataFG$TOD)
+TOZoneTotal <- c(sum(NCSUTeamDataFG$TOO), sum(NCSUTeamDataFG$TON), sum(NCSUTeamDataFG$TOD))
+ShotTotalUNC <- sum(NCSUTeamDataFG$Shots)
+ShotHouseTotal <- sum(NCSUTeamDataFG$ShotsFromHouse)
+ShotHousePerc <- round((ShotHouseTotal/ShotTotalUNC)*100, digits=2)
+ShotTotalNCSU <- sum(NCSUTeamDataFG$Saves)
+PKTotal <- round((sum(NCSUTeamDataFG$PK)/sum(NCSUTeamDataFG$PEN))*100,digits=2)
+PENTotal <- round((sum(NCSUTeamDataFG$PP)/sum(NCSUTeamDataFG$PENOPP))*100,digits=2)
+
+TODF <- data.frame(Category = c("TOO", "TON", "TOD"),
+                   Frequency = TOZoneTotal)
+
+toplot <- ggplot(TODF, aes(x = Category, y = Frequency, fill = Category)) +
+  geom_bar(stat = "identity", color = "black") +
+  labs(title = "Turnover by Zone",
+       x = "Category",
+       y = "Frequency") +
+  theme_minimal()
+
+toplot
+
+```
+
+---
+
+<br>
+
+
+
+```{r, echo=FALSE}
+faceoff_set <- merge(data, data2, by = "Player", all = TRUE) %>%
+  transmute(Player,
+            Pos = Pos.x,
+            FOTotal = FO.x+FO.y,
+            FOWTotal = FOW.x+FOW.y,
+            FOWPerc = round((FOWTotal/FOTotal)*100, digits=2)) %>% 
+  arrange(desc(FOWPerc)) %>%
+  subset(FOTotal > 5)
+
+FOWTable <- kable(faceoff_set) %>% 
+  footnote(general='Shows a Player and their faceoff win percentage if they took more than 5 draws this weekend.') %>%
+  kable_styling(bootstrap_options = c("striped","hover"), full_width = F, position = "left") %>%
+  remove_column(3)
+
+FOWTable
+```
+
+---
+
+
+Our faceoff win percentage as a team this weekend was: `r FaceoffPercentage`% 
+
+We had `r HitTotalUNC` hits and NC State had `r HitTotalNCSU`. We outhit them by 11.
+
+Out of the `r ShotTotalUNC` shots that we had, only `r ShotHouseTotal` were from the house. that is `r ShotHousePerc`%. NC State took `r ShotTotalNCSU` shots on us.
+
+Our penalty kill this weekend was `r PKTotal`% and our powerplay was a `r PENTotal`%, which means we scored on zero powerplays that we had.
+
+For season aggregates go to the main page of the website.
+
+<br>
+
+- [Main Page](../index.html)
+
+<br><br><br>
