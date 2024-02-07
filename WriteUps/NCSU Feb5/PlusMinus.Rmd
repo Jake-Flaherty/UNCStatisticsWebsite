@@ -1,6 +1,8 @@
 ---
 title: "UNC vs NCSU Weekend Games"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 date: "2024-02-05"
 ---
 
@@ -193,9 +195,5 @@ Out of the `r ShotTotalUNC` shots that we had, only `r ShotHouseTotal` were from
 Our penalty kill this weekend was `r PKTotal`% and our powerplay was a `r PENTotal`%, which means we scored on zero powerplays that we had.
 
 For season aggregates go to the main page of the website.
-
-<br>
-
-- [Main Page](../)
 
 <br><br><br>
