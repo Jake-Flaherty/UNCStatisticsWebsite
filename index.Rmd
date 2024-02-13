@@ -24,7 +24,7 @@ library(readr)
 library(tidyverse)
 library(knitr)
 
-Indivi_Stats <- read_csv("UNC Roster Individual Febuary 6.csv")
+Indivi_Stats <- read_csv("UNC Roster Individual Febuary 13.csv")
 Team_Stats <- read_csv("./23-24 UNC Team Stats - Sheet1.csv")
 ```
 
